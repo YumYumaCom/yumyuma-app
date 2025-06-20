@@ -117,34 +117,53 @@ export default function App() {
     }
   };
 
-  const findRecipes = async () => {
+    const findRecipes = async () => {
     if (ingredients.length === 0) {
       setError('Please add at least one ingredient.');
       return;
     }
-
     setIsLoading(true);
     setError(null);
     setRecipes([]);
-
     try {
-      const textPrompt = `Create 3 creative recipe ideas using: ${ingredients.join(', ')}. Each should include name, description, ingredients (with name, quantity, and if the user has it), prep time, cooking time/temp, and instructions. Return as JSON array.`;
-      const payload = {
-        contents: [{ role: "user", parts: [{ text: textPrompt }] }],
+      const textPrompt = `Based on the following list of ingredients, please generate 3 creative and distinct recipe ideas. The user has these ingredients: ${ingredients.join(', ')}. For each recipe, provide: recipeName, a short description, all necessary ingredients (name, quantity, and userHas boolean), step-by-step instructions, prepTime, and if applicable, 'cookingDetails' with time, temperatureC, and temperatureF. Ensure the response is a valid JSON array.`;
+      const textPayload = {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: textPrompt }],
+          },
+        ],
         generationConfig: {
           responseMimeType: "application/json",
-          responseSchema: recipeSchema
-        }
+          responseSchema: recipeSchema,
+        },
       };
-
-      const response = await fetch(getGeminiApiUrl(), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+      const textResponse = await fetch(getGeminiApiUrl(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(textPayload),
       });
+      if (!textResponse.ok)
+        throw new Error(`API (text) request failed: ${textResponse.status}`);
+      const textResult = await textResponse.json();
+      if (!textResult.candidates?.[0]?.content?.parts?.[0]?.text) {
+        throw new Error("Could not parse recipes from the API response.");
+      }
+      const parsedRecipes = JSON.parse(
+        textResult.candidates[0].content.parts[0].text
+      );
+      setRecipes(parsedRecipes);
+      setHasSearched(true);
+    } catch (err) {
+      console.error("Error in findRecipes process:", err);
+      setError(`Sorry, a problem occurred. ${err.message}`);
+      setRecipes([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      if (!response.ok) throw new Error(`Gemini API failed: ${response.status}`);
-      const result = await r
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 font-sans p-4">
       <header className="text-center mb-8">
