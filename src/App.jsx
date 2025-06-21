@@ -4,13 +4,15 @@ import React, { useState, useEffect } from 'react';
 
 // Function to get the Gemini Text API URL
 const getGeminiApiUrl = () => {
-  const apiKey = "AIzaSyCiNWvQJeE3UP4-yoa75cNnL26rsHINRhA"; // API key is handled by the environment, leave empty.
+  const apiKey = "const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+"; // API key is handled by the environment, leave empty.
   return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 };
 
 // Function to get the Imagen API URL
 const getImagenApiUrl = () => {
-  const apiKey = ""; // Still use env variable if needed
+  const apiKey = "const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+"; // Still use env variable if needed
   return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateContent?key=${apiKey}`;
 };
 
