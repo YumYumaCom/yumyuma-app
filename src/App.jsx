@@ -102,15 +102,18 @@ const RecipeCard = ({ recipe, id }) => {
     const [isTwistLoading, setIsTwistLoading] = useState(false);
     const [twistError, setTwistError] = useState(null);
 
-    const generateImage = async () => {
+const generateImage = async () => {
   setIsImageLoading(true);
   setImageError(null);
 
-  const imagePrompt = `A delicious, professional food photograph of "${recipe.recipeName}". ${recipe.description}. The dish is beautifully plated and styled, with natural lighting and a clean, appealing background.`;
+  const imagePrompt = `A delicious, high-quality food photograph of "${recipe.recipeName}". ${recipe.description}. Styled on a plate with natural lighting and a clean background.`;
 
   const imagePayload = {
-    instances: [{ prompt: imagePrompt }],
-    parameters: { sampleCount: 1 }
+    contents: [{ role: "user", parts: [{ text: imagePrompt }] }],
+    generationConfig: {
+      temperature: 0.4,
+      candidateCount: 1
+    }
   };
 
   try {
@@ -126,11 +129,14 @@ const RecipeCard = ({ recipe, id }) => {
 
     const result = await response.json();
 
-    if (result?.predictions?.[0]?.bytesBase64Encoded) {
-      setImageUrl(`data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`);
+    const base64 = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+
+    if (base64) {
+      setImageUrl(`data:image/png;base64,${base64}`);
     } else {
-      throw new Error("Could not parse image from API response.");
+      throw new Error("No image data found in response.");
     }
+
   } catch (err) {
     console.error("Error generating image:", err);
     setImageError(err.message);
@@ -138,6 +144,7 @@ const RecipeCard = ({ recipe, id }) => {
     setIsImageLoading(false);
   }
 };
+
 
 
     const handlePrint = () => {
