@@ -10,9 +10,10 @@ const getGeminiApiUrl = () => {
 
 // Function to get the Imagen API URL
 const getImagenApiUrl = () => {
-  const apiKey = "AIzaSyCiNWvQJeE3UP4-yoa75cNnL26rsHINRhA";
-  return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3:generateContent?key=${apiKey}`;
+  const apiKey = ""; // Still use env variable if needed
+  return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateContent?key=${apiKey}`;
 };
+
 
 
 
