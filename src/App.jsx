@@ -6,21 +6,13 @@ import React, { useState, useEffect } from 'react';
 const getGeminiApiUrl = () => {
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-
-
   return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 };
 
-// Function to get the Imagen API URL
 const getImagenApiUrl = () => {
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-  return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateContent?key=${apiKey}`;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3:generateContent?key=${apiKey}`;
 };
-
-
-
-
 
 // --- Schemas for AI Responses ---
 const recipeSchema = {
