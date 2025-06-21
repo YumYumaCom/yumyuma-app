@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 const getGeminiApiUrl = () => {
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-"; // API key is handled by the environment, leave empty.
+
   return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 };
 
