@@ -12,11 +12,10 @@ const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
 // Function to get the Imagen API URL
 const getImagenApiUrl = () => {
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-"; // Still use env variable if needed
+  const apiKey = import.meta.env.VITE_IMAGEN_API_KEY;
   return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateContent?key=${apiKey}`;
 };
+
 
 
 
