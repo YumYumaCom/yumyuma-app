@@ -14,7 +14,7 @@ const getImagenApiUrl = () => {
   return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3:generateContent?key=${apiKey}`;
 };
 
-}
+
 
 // --- Schemas for AI Responses ---
 const recipeSchema = {
