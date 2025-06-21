@@ -7,12 +7,14 @@ const getGeminiApiUrl = () => {
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
 
+
   return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 };
 
 // Function to get the Imagen API URL
 const getImagenApiUrl = () => {
-  const apiKey = import.meta.env.VITE_IMAGEN_API_KEY;
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
   return `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0:generateContent?key=${apiKey}`;
 };
 
