@@ -103,22 +103,42 @@ const RecipeCard = ({ recipe, id }) => {
     const [twistError, setTwistError] = useState(null);
 
     const generateImage = async () => {
-        setIsImageLoading(true);
-        setImageError(null);
-        const imagePrompt = `A delicious, professional food photograph of "${recipe.recipeName}". ${recipe.description}. The dish is beautifully plated and styled, with natural lighting and a clean, appealing background.`;
-        const imagePayload = { instances: [{ prompt: imagePrompt }], parameters: { "sampleCount": 1 } };
-        try {
-            const response = await fetch(getImagenApiUrl(), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(imagePayload) });
-            if (!response.ok) throw new Error(`Image generation failed with status: ${response.status}`);
-            const result = await response.json();
-            if (result.predictions?.[0]?.bytesBase64Encoded) {
-                setImageUrl(`data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`);
-            } else { throw new Error("Could not parse image from API response."); }
-        } catch (err) {
-            console.error("Error generating image:", err);
-            setImageError(err.message);
-        } finally { setIsImageLoading(false); }
-    };
+  setIsImageLoading(true);
+  setImageError(null);
+
+  const imagePrompt = `A delicious, professional food photograph of "${recipe.recipeName}". ${recipe.description}. The dish is beautifully plated and styled, with natural lighting and a clean, appealing background.`;
+
+  const imagePayload = {
+    instances: [{ prompt: imagePrompt }],
+    parameters: { sampleCount: 1 }
+  };
+
+  try {
+    const response = await fetch(getImagenApiUrl(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(imagePayload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Image generation failed with status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result?.predictions?.[0]?.bytesBase64Encoded) {
+      setImageUrl(`data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`);
+    } else {
+      throw new Error("Could not parse image from API response.");
+    }
+  } catch (err) {
+    console.error("Error generating image:", err);
+    setImageError(err.message);
+  } finally {
+    setIsImageLoading(false);
+  }
+};
+
 
     const handlePrint = () => {
         const printSection = document.getElementById(id);
